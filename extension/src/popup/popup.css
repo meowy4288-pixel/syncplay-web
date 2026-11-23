@@ -1,0 +1,159 @@
+:root {
+  color-scheme: dark;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+body {
+  width: 320px;
+  margin: 0;
+  padding: 14px;
+  background: #16181d;
+  color: #e8eaed;
+  font-size: 13px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.badge {
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #3a3d45;
+  color: #c8cbd1;
+  font-size: 11px;
+}
+
+.badge.online {
+  background: #164b35;
+  color: #6ee7a8;
+}
+
+label {
+  display: block;
+  margin: 8px 0 4px;
+  color: #a9adb6;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 7px 8px;
+  border: 1px solid #41454e;
+  border-radius: 6px;
+  background: #20232a;
+  color: #fff;
+  font: inherit;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+}
+
+.row > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+button {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #41454e;
+  border-radius: 6px;
+  background: #2b2f37;
+  color: #e8eaed;
+  font: inherit;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  background: #353a44;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+button.primary {
+  border-color: #2f7de1;
+  background: #1f6feb;
+  color: #fff;
+}
+
+button.primary:hover:not(:disabled) {
+  background: #2b7ff2;
+}
+
+button.wide {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.section {
+  margin-top: 14px;
+  padding: 10px;
+  border: 1px solid #2f333b;
+  border-radius: 6px;
+  background: #1c1f25;
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.muted {
+  color: #9297a1;
+  font-size: 11px;
+}
+
+.users {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  max-height: 110px;
+  overflow-y: auto;
+}
+
+.users li {
+  padding: 3px 0;
+}
+
+.users li::before {
+  content: "●";
+  margin-right: 7px;
+  color: #6ee7a8;
+  font-size: 9px;
+}
+
+.diagnostics {
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+.error {
+  margin: 8px 0 0;
+  color: #ff9b9b;
+  line-height: 1.4;
+}

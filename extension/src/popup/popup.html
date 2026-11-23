@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Syncplay Web</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Syncplay Web</h1>
+      <span id="status" class="badge">disconnected</span>
+    </header>
+
+    <label for="bridgeUrl">Bridge WS URL</label>
+    <input id="bridgeUrl" type="text" spellcheck="false" autocomplete="off" placeholder="ws://127.0.0.1:8998/bridge" />
+
+    <div class="row">
+      <div>
+        <label for="serverHost">Syncplay server</label>
+        <input id="serverHost" type="text" spellcheck="false" autocomplete="off" placeholder="syncplay.pl" />
+      </div>
+      <div>
+        <label for="serverPort">Port</label>
+        <input id="serverPort" type="number" min="1" max="65535" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label for="room">Room</label>
+        <input id="room" type="text" spellcheck="false" autocomplete="off" />
+      </div>
+      <div>
+        <label for="user">Username</label>
+        <input id="user" type="text" spellcheck="false" autocomplete="off" />
+      </div>
+    </div>
+
+    <label for="password">Server password (optional)</label>
+    <input id="password" type="password" autocomplete="off" />
+
+    <div class="buttons">
+      <button id="connect" class="primary" type="button">Connect</button>
+      <button id="disconnect" type="button">Disconnect</button>
+    </div>
+
+    <div class="section">
+      <div class="section-head">
+        <strong>Room</strong>
+        <span id="roomInfo" class="muted">—</span>
+      </div>
+      <div class="muted" id="leaderInfo">Leader: none</div>
+      <ul id="users" class="users"><li class="muted">No one yet</li></ul>
+    </div>
+
+    <div class="buttons">
+      <button id="resync" type="button">↻ Resync to me</button>
+      <button id="ready" type="button">Toggle ready</button>
+    </div>
+    <div class="buttons">
+      <button id="leaderClaim" type="button">Become leader</button>
+      <button id="leaderPass" type="button">Pass leader</button>
+      <button id="leaderRelease" type="button">Release</button>
+    </div>
+
+    <div id="diagnostics" class="diagnostics muted"></div>
+    <p id="error" class="error" hidden></p>
+
+    <script src="../shared/protocol.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

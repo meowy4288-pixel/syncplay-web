@@ -1,0 +1,53 @@
+{
+  "manifest_version": 3,
+  "name": "Syncplay Web (MVP)",
+  "short_name": "SyncplayWeb",
+  "version": "0.1.0",
+  "description": "MVP browser client for Syncplay via WS<->TCP bridge. Sync play/pause/seek on HTML5 video.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "syncplay-web-mvp@example.com",
+      "strict_min_version": "120.0"
+    }
+  },
+  "permissions": [
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>",
+    "ws://*/*",
+    "wss://*/*"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' ws: wss:"
+  },
+  "background": {
+    "scripts": [
+      "src/background/background.js"
+    ],
+    "service_worker": "src/background/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "src/shared/protocol.js",
+        "src/content/content.js"
+      ],
+      "all_frames": true,
+      "match_about_blank": true,
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_title": "Syncplay Web (MVP)"
+  },
+  "icons": {
+    "48": "icons/icon-48.png",
+    "96": "icons/icon-96.png"
+  }
+}
