@@ -38,6 +38,11 @@ h1 {
   color: #6ee7a8;
 }
 
+.badge.connecting {
+  background: #5a4520;
+  color: #fbbf24;
+}
+
 label {
   display: block;
   margin: 8px 0 4px;
@@ -75,7 +80,8 @@ input {
 }
 
 button {
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
   padding: 8px 10px;
   border: 1px solid #41454e;
   border-radius: 6px;
@@ -83,10 +89,16 @@ button {
   color: #e8eaed;
   font: inherit;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 button:hover:not(:disabled) {
   background: #353a44;
+}
+
+button:focus-visible {
+  outline: 2px solid #2f7de1;
+  outline-offset: 1px;
 }
 
 button:disabled {
@@ -147,9 +159,14 @@ button.wide {
   font-size: 9px;
 }
 
+#leaderInfo {
+  margin-top: 4px;
+}
+
 .diagnostics {
   margin-top: 10px;
   line-height: 1.5;
+  word-break: break-word;
 }
 
 .error {

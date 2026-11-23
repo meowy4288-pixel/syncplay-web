@@ -37,6 +37,7 @@
   let stateTimer = null;
   let lastStateSentAt = 0;
   let leaderAnnounceTicks = 0;
+  let lastError = "";
 
   // Syncplay ping service
   let rtt = 0;
@@ -101,6 +102,7 @@
       room: roomName,
       user: settings.user,
       leader,
+      lastError,
       users: Object.entries(roomUsers).map(([name, u]) => ({
         name, isReady: !!u.isReady, controller: !!u.controller, file: u.file || null,
       })),
@@ -270,6 +272,7 @@
     } else if (msg.event === "tcp-error" || msg.event === "tcp-close") {
       logged = false;
       connected = false;
+      lastError = msg.event === "tcp-error" ? "TCP/bridge error" : "Connection closed";
       setBadge("!", "#dc2626");
       broadcastState();
       scheduleReconnect();
@@ -317,6 +320,7 @@
     if (hello.room && hello.room.name) roomName = hello.room.name;
     logged = true;
     hadFirstState = false;
+    lastError = "";
     setBadge("ON", "#16a34a");
     saveSettings();
     sendList();
@@ -433,13 +437,17 @@
   }
 
   function handleError(err) {
-    debug("Syncplay error: " + (err.message || JSON.stringify(err)));
-    sendPopup("error", { message: err.message || String(err) });
+    const msg = err && err.message ? err.message : String(err);
+    lastError = msg;
+    debug("Syncplay error: " + msg);
+    sendPopup("error", { message: msg });
+    broadcastState();
   }
 
   function connect() {
     try { disconnect(false); } catch {}
     settings.wantConnected = true;
+    lastError = "";
     saveSettings();
     let url;
     try {
@@ -448,7 +456,8 @@
       url.searchParams.set("port", String(settings.serverPort || DEFAULT_SETTINGS.serverPort));
     } catch (e) {
       debug("bad bridge url: " + e);
-      sendPopup("error", { message: "Bad bridge URL" });
+      lastError = "Bad bridge URL";
+      sendPopup("error", { message: lastError });
       broadcastState();
       return;
     }
@@ -456,7 +465,8 @@
       ws = new WebSocket(url.toString());
     } catch (e) {
       debug("ws create failed: " + e);
-      sendPopup("error", { message: "WebSocket failed: " + e.message });
+      lastError = "WebSocket failed: " + (e.message || e);
+      sendPopup("error", { message: lastError });
       scheduleReconnect();
       broadcastState();
       return;
@@ -493,7 +503,7 @@
   function disconnect(userInitiated = true) {
     if (userInitiated) {
       if (isLeader()) { try { sendLeaderControl("release"); } catch {} leader = null; }
-      settings.wantConnected = false; saveSettings();
+      settings.wantConnected = false; lastError = ""; saveSettings();
     }
     clearTimeout(reconnectTimer); reconnectTimer = null;
     clearInterval(stateTimer); stateTimer = null;

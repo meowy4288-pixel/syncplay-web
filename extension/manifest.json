@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Syncplay Web (MVP)",
   "short_name": "SyncplayWeb",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MVP browser client for Syncplay via WS<->TCP bridge. Sync play/pause/seek on HTML5 video.",
   "browser_specific_settings": {
     "gecko": {

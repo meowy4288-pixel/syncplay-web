@@ -12,6 +12,7 @@
     leaderClaim: $("leaderClaim"), leaderPass: $("leaderPass"), leaderRelease: $("leaderRelease"), leaderInfo: $("leaderInfo"),
     users: $("users"), roomInfo: $("roomInfo"), diagnostics: $("diagnostics"), error: $("error"),
   };
+  let lastErrorMsg = "";
 
   function toBg(action, extra = {}) {
     return api.runtime.sendMessage({ type: POPUP_TO_BG, action, ...extra });
@@ -28,8 +29,10 @@
   function render(state) {
     if (!state) return;
     const online = !!state.connected;
-    els.status.textContent = online ? "connected" : (state.bridgeConnected ? "bridge" : "disconnected");
+    const connecting = !online && !!state.bridgeConnected;
+    els.status.textContent = online ? "connected" : (connecting ? "connecting" : "disconnected");
     els.status.classList.toggle("online", online);
+    els.status.classList.toggle("connecting", connecting);
 
     const s = state.settings || {};
     if (document.activeElement !== els.bridgeUrl) els.bridgeUrl.value = s.bridgeUrl || "";
@@ -74,7 +77,9 @@
     els.diagnostics.textContent = online
       ? `${fmtTime(g.position)} · ${g.paused ? "paused" : "playing"} · ${state.activeFrame ? "video attached" : "no video detected"} · ${isLeader ? "you are leader" : (leader ? "following leader" : "no leader")}`
       : "Connect through the WS bridge to a Syncplay server.";
-    els.error.hidden = true; els.error.textContent = "";
+    const err = state.lastError || lastErrorMsg;
+    if (err) { els.error.hidden = false; els.error.textContent = err; }
+    else { els.error.hidden = true; els.error.textContent = ""; }
   }
 
   function configFromInputs() {
@@ -97,8 +102,8 @@
     i.addEventListener("change", saveConfig); i.addEventListener("blur", saveConfig);
   });
 
-  els.connect.addEventListener("click", async () => { saveConfig(); render(await toBg("connect", { config: configFromInputs() }).catch(()=>null)); refresh(); });
-  els.disconnect.addEventListener("click", async () => { await toBg("disconnect").catch(()=>{}); refresh(); });
+  els.connect.addEventListener("click", async () => { lastErrorMsg = ""; saveConfig(); render(await toBg("connect", { config: configFromInputs() }).catch(()=>null)); refresh(); });
+  els.disconnect.addEventListener("click", async () => { lastErrorMsg = ""; await toBg("disconnect").catch(()=>{}); refresh(); });
   els.resync.addEventListener("click", async () => { await toBg("resync").catch(()=>{}); });
   els.ready.addEventListener("click", async () => {
     const st = await toBg("get-state").catch(()=>null);
@@ -116,6 +121,10 @@
     refresh();
   });
 
-  api.runtime.onMessage.addListener((msg) => { if (msg && msg.type === BG_TO_POPUP && msg.action === "state") render(msg.state); });
+  api.runtime.onMessage.addListener((msg) => {
+    if (!msg || msg.type !== BG_TO_POPUP) return;
+    if (msg.action === "state") { if (msg.state && msg.state.lastError) lastErrorMsg = ""; render(msg.state); }
+    if (msg.action === "error") { lastErrorMsg = msg.message || "Error"; els.error.hidden = false; els.error.textContent = lastErrorMsg; }
+  });
   refresh(); setInterval(refresh, 1500);
 })();
