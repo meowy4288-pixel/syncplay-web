@@ -13,6 +13,7 @@
     users: $("users"), roomInfo: $("roomInfo"), diagnostics: $("diagnostics"), error: $("error"),
   };
   let lastErrorMsg = "";
+  let lastRendered = null;
 
   function toBg(action, extra = {}) {
     return api.runtime.sendMessage({ type: POPUP_TO_BG, action, ...extra });
@@ -35,12 +36,22 @@
     els.status.classList.toggle("connecting", connecting);
 
     const s = state.settings || {};
-    if (document.activeElement !== els.bridgeUrl) els.bridgeUrl.value = s.bridgeUrl || "";
-    if (document.activeElement !== els.serverHost) els.serverHost.value = s.serverHost || "";
-    if (document.activeElement !== els.serverPort) els.serverPort.value = s.serverPort || 8999;
-    if (document.activeElement !== els.room) els.room.value = s.room || state.room || "";
-    if (document.activeElement !== els.user) els.user.value = s.user || state.user || "";
-    if (document.activeElement !== els.password && s.password !== "***") els.password.value = s.password || "";
+    const next = {
+      bridgeUrl: s.bridgeUrl || "",
+      serverHost: s.serverHost || "",
+      serverPort: String(s.serverPort || 8999),
+      room: s.room || state.room || "",
+      user: s.user || state.user || "",
+      password: s.password === "***" ? (lastRendered ? lastRendered.password : "") : (s.password || ""),
+    };
+    for (const [k, v] of Object.entries(next)) {
+      const el = els[k];
+      if (!el) continue;
+      if (document.activeElement === el) continue;
+      if (lastRendered && el.value !== lastRendered[k]) continue; // user edited
+      if (el.value !== v) el.value = v;
+    }
+    lastRendered = next;
 
     els.connect.disabled = online;
     els.disconnect.disabled = !online && !state.bridgeConnected;
