@@ -21,9 +21,9 @@
 
   const DEFAULT_SETTINGS = {
     bridgeUrl: "ws://127.0.0.1:8998/bridge",
-    serverHost: "127.0.0.1",
-    serverPort: 8999,
-    room: "default",
+    serverHost: "syncplay.pl",
+    serverPort: 8995,
+    room: "syncplay-web",
     user: "web-" + Math.floor(Math.random() * 10000),
     password: "",
     wantConnected: false,

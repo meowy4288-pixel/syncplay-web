@@ -39,8 +39,8 @@
     const next = {
       bridgeUrl: s.bridgeUrl || "",
       serverHost: s.serverHost || "",
-      serverPort: String(s.serverPort || 8999),
-      room: s.room || state.room || "",
+      serverPort: String(s.serverPort || 8995),
+      room: s.room || state.room || "syncplay-web",
       user: s.user || state.user || "",
       password: s.password === "***" ? (lastRendered ? lastRendered.password : "") : (s.password || ""),
     };
@@ -97,8 +97,8 @@
     return {
       bridgeUrl: els.bridgeUrl.value.trim(),
       serverHost: els.serverHost.value.trim(),
-      serverPort: Number(els.serverPort.value) || 8999,
-      room: els.room.value.trim() || "default",
+      serverPort: Number(els.serverPort.value) || 8995,
+      room: els.room.value.trim() || "syncplay-web",
       user: els.user.value.trim() || "web-user",
       password: els.password.value,
     };

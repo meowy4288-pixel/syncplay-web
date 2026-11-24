@@ -43,7 +43,7 @@ npm start
 # Bridge: ws://127.0.0.1:8998/bridge
 ```
 
-By default the bridge only allows localhost Syncplay targets. To connect to a public/remote Syncplay server:
+By default the bridge only allows localhost Syncplay targets. To connect to a public/remote Syncplay server (including the default `syncplay.pl:8995`):
 
 ```bash
 ALLOW_ANY_TARGET=1 npm start
@@ -85,9 +85,9 @@ zip -r ../syncplay-web-mvp.xpi . -x '*.git*' -x '*node_modules/*'
 Open the extension popup and set:
 
 - **Bridge WS URL**: `ws://127.0.0.1:8998/bridge`
-- **Syncplay server**: `127.0.0.1`
-- **Port**: `8999`
-- **Room**: same room on all clients
+- **Syncplay server**: `syncplay.pl` (default) or your own server
+- **Port**: `8995` for `syncplay.pl` (or your server’s port)
+- **Room**: same room on all clients (default: `syncplay-web`)
 - **Username**: unique per client
 - **Password**: only if the Syncplay server requires it
 

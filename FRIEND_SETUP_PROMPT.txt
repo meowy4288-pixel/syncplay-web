@@ -1,0 +1,37 @@
+Set up Syncplay Web (MVP) on this machine so I can join the same Syncplay room as my friend.
+
+Repo: https://github.com/meowy4288-pixel/syncplay-web
+
+Hardwired defaults (use these unless I say otherwise):
+- Bridge WS URL: ws://127.0.0.1:8998/bridge
+- Syncplay server: syncplay.pl
+- Syncplay port: 8995
+- Room: syncplay-web
+- Username: pick a unique name for me (do not reuse "web-user")
+- Password: empty
+
+Do this:
+1. Clone or update the repo locally (prefer ~/syncplay-web). Do not put it inside an unrelated project.
+2. Install bridge deps:
+   cd ~/syncplay-web/bridge && npm install
+3. Start the bridge with public Syncplay targets allowed:
+   cd ~/syncplay-web/bridge && ALLOW_ANY_TARGET=1 npm start
+   Leave it running in background if needed, and confirm http://127.0.0.1:8998/health returns {"ok":true}.
+4. Load the browser extension from ~/syncplay-web/extension:
+   - Chromium/Chrome: chrome://extensions -> Developer mode -> Load unpacked -> select extension/
+   - Firefox Nightly: package XPI (`cd ~/syncplay-web/extension && zip -r ../syncplay-web-mvp.xpi . -x '*.git*' -x '*node_modules/*'`) then install via about:addons -> Install Add-on From File (xpinstall.signatures.required=false in Nightly).
+5. In the extension popup, set/configure:
+   Bridge WS URL = ws://127.0.0.1:8998/bridge
+   Syncplay server = syncplay.pl
+   Port = 8995
+   Room = syncplay-web
+   Username = <unique name>
+   Password = (empty)
+   Then click Connect.
+6. Verify: popup shows "connected" and "video attached" when a normal HTML5 video page is open. If it shows TCP/bridge error, check bridge is running and ALLOW_ANY_TARGET=1 is set. If it shows disconnected, confirm bridge URL and that the bridge process is alive.
+7. Report back: what you installed/started, what browser you loaded the extension into, and the popup status.
+
+Important:
+- This uses the public Syncplay server syncplay.pl:8995. Both people must use the same room name.
+- Keep the bridge local unless you add auth/TLS.
+- Do not change extension sync logic; only setup/configure.
