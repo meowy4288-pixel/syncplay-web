@@ -99,7 +99,7 @@
       serverHost: els.serverHost.value.trim(),
       serverPort: Number(els.serverPort.value) || 8995,
       room: els.room.value.trim() || "syncplay-web",
-      user: els.user.value.trim() || "web-user",
+      user: els.user.value.trim() || "kisa",
       password: els.password.value,
     };
   }

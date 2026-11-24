@@ -24,7 +24,7 @@
     serverHost: "syncplay.pl",
     serverPort: 8995,
     room: "syncplay-web",
-    user: "web-" + Math.floor(Math.random() * 10000),
+    user: "kisa",
     password: "",
     wantConnected: false,
   };
