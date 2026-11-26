@@ -185,8 +185,10 @@
       if (lastReportedLocalPos !== null && (nowSec - lastReportedLocalAt) >= 1.5) {
         const advanced = Math.abs(realPos - lastReportedLocalPos);
         const behind = gpos - realPos;
-        if (advanced < 0.25 && behind > 0.5 && behind < 10) {
-          // Stalled: report paused at real position to avoid dragging others.
+        // If not advancing, report paused to avoid dragging server/others into a stuck loop.
+        if (advanced < 0.25 && (nowSec - lastReportedLocalAt) >= 2.0) {
+          local = { position: realPos, paused: true };
+        } else if (advanced < 0.25 && behind > 0.5 && behind < 10) {
           local = { position: realPos, paused: true };
         }
       }
